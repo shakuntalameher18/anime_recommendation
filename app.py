@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -55,3 +54,4 @@ if st.button("Get Recommendations"):
                 st.write(f"{i}. {rec}")
     else:
         st.warning("Please enter an anime name.")
+
