@@ -1,11 +1,22 @@
 import streamlit as st
 import pandas as pd
 import joblib
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
-# Load data and models
+# Load data
 anime_df = pd.read_csv("anime.csv")
-cosine_sim = joblib.load('cosine_sim.pkl')
-indices = joblib.load('indices.pkl')
+
+# Fill missing genres
+anime_df['genre'] = anime_df['genre'].fillna('')
+
+# Create TF-IDF vectorizer and compute cosine similarity
+tfidf = TfidfVectorizer(stop_words='english')
+tfidf_matrix = tfidf.fit_transform(anime_df['genre'])
+cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+# Create indices mapping
+indices = pd.Series(anime_df.index, index=anime_df['name'])
 
 # Define the recommendation function
 def content_based_recommendation(title, top_n=5, sig=cosine_sim):
